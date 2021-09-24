@@ -1,19 +1,33 @@
 import { Telegraf } from 'telegraf';
+import TelegrafQuestion from 'telegraf-question';
 import { connectDB, closeConnection } from './db';
 
-import reply from './middlewares/reply';
 import error from './middlewares/error';
-// Import other middlewares
 
-// Import commands
+import deploy from './commands/deploy';
+
+import setServer from './functions/setServer';
+import setGithub from './functions/setGithub';
+import settings from './commands/settings';
 
 const bot: Telegraf = new Telegraf(process.env.BOT_API_TOKEN);
 
-bot.use(reply);
 bot.use(error);
-// Use other middlewares
+// @ts-ignore
+bot.use(TelegrafQuestion());
 
-// Bind commands
+bot.command('deploy', deploy);
+bot.command('settings', settings);
+
+bot.action('settings-server', async (ctx) => {
+  ctx.answerCbQuery();
+  await setServer(ctx);
+});
+
+bot.action('settings-github', async (ctx) => {
+  ctx.answerCbQuery();
+  await setGithub(ctx);
+});
 
 process.once('SIGINT', () => {
   closeConnection()
