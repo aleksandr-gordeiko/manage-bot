@@ -1,9 +1,8 @@
 import { Bot } from 'grammy/out/bot';
-import { session, SessionFlavor } from 'grammy/out/convenience/session';
-import { Context } from 'grammy/out/context';
+import { session } from 'grammy/out/convenience/session';
 import { Router } from '@grammyjs/router';
 import { connectDB, closeConnection } from './db';
-import Options from './types';
+import { SessionContext, SessionData } from './types';
 
 import error from './middlewares/error';
 
@@ -13,14 +12,9 @@ import settings from './commands/settings';
 import setServer from './scenes/setServer';
 import setGithub from './scenes/setGithub';
 
-interface SessionData {
-  step: 'idle' | 'github_settings_step1' | 'github_settings_step2';
-  options?: Options;
-}
-type MyContext = Context & SessionFlavor<SessionData>;
-const bot = new Bot<MyContext>(process.env.BOT_API_TOKEN);
+const bot = new Bot<SessionContext>(process.env.BOT_API_TOKEN);
 bot.use(session({ initial: (): SessionData => ({ step: 'idle' }) }));
-const router = new Router<MyContext>((ctx) => ctx.session.step);
+const router = new Router<SessionContext>((ctx) => ctx.session.step);
 
 router.route('github_settings_step1', async (ctx) => {
   await setGithub(ctx, 2);

@@ -1,12 +1,13 @@
 import { addOrUpdateOptions, getOptions } from '../db';
+import { SessionContext } from '../types';
 
-const step1 = async (ctx) => {
+const step1 = async (ctx: SessionContext) => {
   ctx.session.options = await getOptions();
-  await ctx.reply(`Your current Github username is ${ctx.session.options.github_username}\n`
+  await ctx.reply(`Your current Github username is "${ctx.session.options.github_username}"\n`
     + 'Send me a new one or "." to cancel');
 };
 
-const step2 = async (ctx) => {
+const step2 = async (ctx: SessionContext) => {
   const newUsername = ctx.message.text;
   if (newUsername !== '.') {
     ctx.session.options.github_username = newUsername;
@@ -17,7 +18,7 @@ const step2 = async (ctx) => {
   }
 };
 
-const setGithub = async (ctx, stepNumber: number) => {
+const setGithub = async (ctx: SessionContext, stepNumber: number) => {
   const steps = [step1, step2];
   await steps[stepNumber - 1](ctx);
 };
