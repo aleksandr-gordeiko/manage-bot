@@ -16,10 +16,10 @@ const bot = new Bot<SessionContext>(process.env.BOT_API_TOKEN);
 bot.use(session({ initial: (): SessionData => ({ step: 'idle' }) }));
 const router = new Router<SessionContext>((ctx) => ctx.session.step);
 
-router.route('github_settings_step1', async (ctx) => {
-  await setGithub(ctx, 2);
-  ctx.session.step = 'github_settings_step2';
-});
+router.route('github_settings_step2', async (ctx) => { await setGithub(ctx, 2); });
+
+router.route('server_settings_step2', async (ctx) => { await setServer(ctx, 2); });
+router.route('server_settings_step3', async (ctx) => { await setServer(ctx, 3); });
 
 bot.use(error);
 bot.use(router);
@@ -29,13 +29,12 @@ bot.command('settings', settings);
 
 bot.callbackQuery('settings-server', async (ctx) => {
   await ctx.answerCallbackQuery();
-  await setServer(ctx);
+  await setServer(ctx, 1);
 });
 
 bot.callbackQuery('settings-github', async (ctx) => {
   await ctx.answerCallbackQuery();
   await setGithub(ctx, 1);
-  ctx.session.step = 'github_settings_step1';
 });
 
 process.once('SIGINT', () => {

@@ -5,6 +5,7 @@ const step1 = async (ctx: SessionContext) => {
   ctx.session.options = await getOptions();
   await ctx.reply(`Your current Github username is "${ctx.session.options.github_username}"\n`
     + 'Send me a new one or "." to cancel');
+  ctx.session.step = 'github_settings_step2';
 };
 
 const step2 = async (ctx: SessionContext) => {
@@ -16,6 +17,7 @@ const step2 = async (ctx: SessionContext) => {
   } else {
     await ctx.reply('Canceled');
   }
+  ctx.session.step = 'idle';
 };
 
 const setGithub = async (ctx: SessionContext, stepNumber: number) => {

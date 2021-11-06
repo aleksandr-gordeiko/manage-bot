@@ -8,7 +8,13 @@ interface Options {
 }
 
 interface SessionData {
-  step: 'idle' | 'github_settings_step1' | 'github_settings_step2';
+  step:
+  'idle' |
+  'github_settings_step1' |
+  'github_settings_step2' |
+  'server_settings_step1' |
+  'server_settings_step2' |
+  'server_settings_step3';
   options?: Options;
 }
 type SessionContext = Context & SessionFlavor<SessionData>;
