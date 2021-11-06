@@ -1,32 +1,47 @@
-import { Telegraf } from 'telegraf';
-import TelegrafQuestion from 'telegraf-question';
+import { Bot } from 'grammy/out/bot';
+import { session, SessionFlavor } from 'grammy/out/convenience/session';
+import { Context } from 'grammy/out/context';
+import { Router } from '@grammyjs/router';
 import { connectDB, closeConnection } from './db';
+import Options from './types';
 
 import error from './middlewares/error';
 
 import deploy from './commands/deploy';
-
-import setServer from './functions/setServer';
-import setGithub from './functions/setGithub';
 import settings from './commands/settings';
 
-const bot: Telegraf = new Telegraf(process.env.BOT_API_TOKEN);
+import setServer from './scenes/setServer';
+import setGithub from './scenes/setGithub';
+
+interface SessionData {
+  step: 'idle' | 'github_settings_step1' | 'github_settings_step2';
+  options?: Options;
+}
+type MyContext = Context & SessionFlavor<SessionData>;
+const bot = new Bot<MyContext>(process.env.BOT_API_TOKEN);
+bot.use(session({ initial: (): SessionData => ({ step: 'idle' }) }));
+const router = new Router<MyContext>((ctx) => ctx.session.step);
+
+router.route('github_settings_step1', async (ctx) => {
+  await setGithub(ctx, 2);
+  ctx.session.step = 'github_settings_step2';
+});
 
 bot.use(error);
-// @ts-ignore
-bot.use(TelegrafQuestion());
+bot.use(router);
 
 bot.command('deploy', deploy);
 bot.command('settings', settings);
 
-bot.action('settings-server', async (ctx) => {
-  ctx.answerCbQuery();
+bot.callbackQuery('settings-server', async (ctx) => {
+  await ctx.answerCallbackQuery();
   await setServer(ctx);
 });
 
-bot.action('settings-github', async (ctx) => {
-  ctx.answerCbQuery();
-  await setGithub(ctx);
+bot.callbackQuery('settings-github', async (ctx) => {
+  await ctx.answerCallbackQuery();
+  await setGithub(ctx, 1);
+  ctx.session.step = 'github_settings_step1';
 });
 
 process.once('SIGINT', () => {
@@ -41,5 +56,5 @@ process.once('SIGTERM', () => {
 });
 
 connectDB()
-  .then(() => bot.launch())
+  .then(() => bot.start())
   .catch((err) => console.log(err));

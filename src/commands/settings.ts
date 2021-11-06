@@ -1,16 +1,12 @@
-import { Context, Markup } from 'telegraf';
+import { Context } from 'grammy/out/context';
+import { InlineKeyboard } from 'grammy/out/convenience/keyboard';
 
 const settings = async (ctx: Context) => {
-  const settingsList = {
-    'settings-server': 'Server 🧮',
-    'settings-github': 'Github 🌍',
-  };
-  const buttons = [];
-  for (const setting in settingsList) {
-    buttons.push([Markup.button.callback(settingsList[setting], `${setting}`)]);
-  }
+  const inlineKeyboard = new InlineKeyboard()
+    .text('Server 🧮', 'settings-server').row()
+    .text('Github 🌍', 'settings-github');
 
-  await ctx.reply('What do you want to configure?', Markup.inlineKeyboard(buttons));
+  await ctx.reply('What do you want to configure?', { reply_markup: inlineKeyboard });
 };
 
 export default settings;
