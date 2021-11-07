@@ -1,7 +1,7 @@
 import {
   Collection, Db, FindCursor,
 } from 'mongodb';
-import Options from './types';
+import { Options } from './types';
 
 const { MongoClient } = require('mongodb');
 
