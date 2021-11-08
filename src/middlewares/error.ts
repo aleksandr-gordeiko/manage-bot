@@ -1,4 +1,4 @@
-import { Context } from 'telegraf';
+import { Context } from 'grammy/out/context';
 
 const error = async (ctx: Context, next: () => any) => {
   try {

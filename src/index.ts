@@ -5,6 +5,7 @@ import { connectDB, closeConnection } from './db';
 import { SessionContext, SessionData } from './types';
 
 import error from './middlewares/error';
+import userRestriction from './middlewares/userRestriction';
 
 import deploy from './commands/deploy';
 import settings from './commands/settings';
@@ -23,6 +24,7 @@ router.route('server_settings_step2', async (ctx) => { await setServer(ctx, 2); 
 router.route('server_settings_step3', async (ctx) => { await setServer(ctx, 3); });
 
 bot.use(error);
+bot.use(userRestriction);
 bot.use(router);
 
 bot.command('deploy', deploy);
