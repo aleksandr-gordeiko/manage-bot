@@ -4,9 +4,9 @@ import { getOptions } from '../db';
 const getsettings = async (ctx: Context) => {
   const options = await getOptions();
   await ctx.reply(
-    `Github username: \`\`\`${options.github_username}\`\`\``
-    + `CI path: \`\`\`${options.ci_path}\`\`\``
-    + `CI server username: \`\`\`${options.ci_username}\`\`\``,
+    `Github username:\n\`\`\`${options.github_username}\`\`\`\n`
+    + `CI path:\n\`\`\`${options.ci_path}\`\`\`\n`
+    + `CI server username:\n\`\`\`${options.ci_username}\`\`\`\n`,
     { parse_mode: 'MarkdownV2' },
   );
 };
