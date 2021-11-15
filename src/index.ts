@@ -13,6 +13,7 @@ import getsettings from './commands/getsettings';
 
 import setServer from './scenes/setServer';
 import setGithub from './scenes/setGithub';
+import deployNode from './scenes/deployNode';
 
 const bot = new Bot<SessionContext>(process.env.BOT_API_TOKEN);
 bot.use(session({ initial: (): SessionData => ({ step: 'idle' }) }));
@@ -22,6 +23,8 @@ router.route('github_settings_step2', async (ctx) => { await setGithub(ctx, 2); 
 
 router.route('server_settings_step2', async (ctx) => { await setServer(ctx, 2); });
 router.route('server_settings_step3', async (ctx) => { await setServer(ctx, 3); });
+
+router.route('deploy_node_step2', async (ctx) => { await deployNode(ctx, 2); });
 
 bot.use(error);
 bot.use(userRestriction);
@@ -39,6 +42,11 @@ bot.callbackQuery('settings-server', async (ctx) => {
 bot.callbackQuery('settings-github', async (ctx) => {
   await ctx.answerCallbackQuery();
   await setGithub(ctx, 1);
+});
+
+bot.callbackQuery('deploy-node', async (ctx) => {
+  await ctx.answerCallbackQuery();
+  await deployNode(ctx, 1);
 });
 
 process.once('SIGINT', () => {

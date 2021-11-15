@@ -14,7 +14,9 @@ interface SessionData {
   'github_settings_step2' |
   'server_settings_step1' |
   'server_settings_step2' |
-  'server_settings_step3';
+  'server_settings_step3' |
+  'deploy_node_step1' |
+  'deploy_node_step2';
   options?: Options;
 }
 type SessionContext = Context & SessionFlavor<SessionData>;
