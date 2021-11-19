@@ -9,9 +9,19 @@ const step1 = async (ctx: SessionContext) => {
 
 const step2 = async (ctx: SessionContext) => {
   const options = await getOptions();
-  const runCommand = './scripts/install.s'
+  const runCommand = 'bash -x scripts/install.sh '
     + `${options.github_username} ${ctx.message.text} ${options.ci_path} ${options.ci_username}`;
-  await exec(runCommand);
+  exec(runCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+  });
   ctx.session.step = 'idle';
 };
 

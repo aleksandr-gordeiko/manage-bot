@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config build/index.js dotenv_config_path=./config.env"
+    "dev": "nodemon -r dotenv/config build/index.js dotenv_config_path=./config.env",
+    "build": "tsc",
+    "start": "node -r dotenv/config build/index.js dotenv_config_path=./config.env"
   },
   "keywords": [],
   "author": "Aleksandr Gordeiko",
@@ -13,6 +15,7 @@
     "dotenv": "^10.0.0",
     "mongodb": "^4.1.2",
     "nodemon": "^2.0.7",
+    "node-fetch": "^3.1.0",
     "grammy": "^1.4.0",
     "@grammyjs/router": "^1.1.1",
     "typescript": "^4.3.4"
