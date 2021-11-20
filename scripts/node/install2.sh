@@ -11,5 +11,5 @@ if [ "$vars" != 0 ]; then
   done
 fi
 
-# sudo systemctl enable "${repo_name}"
-# sudo systemctl start "${repo_name}"
+sudo systemctl enable "${repo_name}"
+sudo systemctl start "${repo_name}"

@@ -18,8 +18,10 @@ const step2 = async (ctx: SessionContext) => {
     + ` ${ctx.session.options.ci_path}`
     + ` ${ctx.session.options.ci_username}`;
   exec(runInstall1, (error, stdout) => {
-    if (stdout === '0\n') {
-      exec('bash -x scripts/node/install2.sh 0');
+    console.log(error);
+    console.log(stdout);
+    if (stdout === 'NOENV\n') {
+      exec(`bash -x scripts/node/install2.sh ${ctx.session.repo_name} ${ctx.session.workdir} 0`);
       ctx.reply('Success!');
       ctx.session.step = 'idle';
     } else {
@@ -35,7 +37,9 @@ const step3 = async (ctx: SessionContext) => {
   for (const envvar of env) {
     runInstall2 += ` ${envvar}`;
   }
-  exec(runInstall2, () => {
+  exec(runInstall2, (error, stdout) => {
+    console.log(error);
+    console.log(stdout);
     ctx.reply('Success!');
     ctx.session.step = 'idle';
   });
