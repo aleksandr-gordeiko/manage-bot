@@ -10,6 +10,7 @@ import userRestriction from './middlewares/userRestriction';
 import deploy from './commands/deploy';
 import settings from './commands/settings';
 import getsettings from './commands/getsettings';
+import cancel from './commands/cancel';
 
 import setServer from './scenes/setServer';
 import setGithub from './scenes/setGithub';
@@ -34,6 +35,7 @@ bot.use(router);
 bot.command('deploy', deploy);
 bot.command('settings', settings);
 bot.command('getsettings', getsettings);
+bot.command('cancel', cancel);
 
 bot.callbackQuery('settings-server', async (ctx) => {
   await ctx.answerCallbackQuery();
