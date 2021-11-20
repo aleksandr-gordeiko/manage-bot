@@ -16,8 +16,11 @@ interface SessionData {
   'server_settings_step2' |
   'server_settings_step3' |
   'deploy_node_step1' |
-  'deploy_node_step2';
+  'deploy_node_step2' |
+  'deploy_node_step3';
   options?: Options;
+  repo_name?: string;
+  workdir?: string;
 }
 type SessionContext = Context & SessionFlavor<SessionData>;
 

@@ -25,6 +25,7 @@ router.route('server_settings_step2', async (ctx) => { await setServer(ctx, 2); 
 router.route('server_settings_step3', async (ctx) => { await setServer(ctx, 3); });
 
 router.route('deploy_node_step2', async (ctx) => { await deployNode(ctx, 2); });
+router.route('deploy_node_step3', async (ctx) => { await deployNode(ctx, 3); });
 
 bot.use(error);
 bot.use(userRestriction);

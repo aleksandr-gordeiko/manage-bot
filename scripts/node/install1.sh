@@ -27,5 +27,9 @@ sed -i -- "s:USER:${ci_user}:g" systemd.service
 mv "deploy.sh" "${ci_path}/scripts/${repo_name}-master.sh"
 sudo mv "systemd.service" "/etc/systemd/system/${repo_name}.service"
 
-# sudo systemctl enable "${repo_name}"
-# sudo systemctl start "${repo_name}"
+cd "${workdir}" || exit
+if [ -f "config.env.sample" ]; then
+  echo "1"
+else
+  echo "0"
+fi

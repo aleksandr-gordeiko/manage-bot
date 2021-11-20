@@ -8,25 +8,41 @@ const step1 = async (ctx: SessionContext) => {
 };
 
 const step2 = async (ctx: SessionContext) => {
-  const options = await getOptions();
-  const runCommand = 'bash -x scripts/install.sh '
-    + `${options.github_username} ${ctx.message.text} ${options.ci_path} ${options.ci_username}`;
-  exec(runCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
+  ctx.session.options = await getOptions();
+  ctx.session.repo_name = ctx.message.text;
+  ctx.session.workdir = `/home/${ctx.session.options.ci_username}/${ctx.session.repo_name}`;
+
+  const runInstall1 = 'bash -x scripts/node/install1.sh'
+    + ` ${ctx.session.options.github_username}`
+    + ` ${ctx.session.repo_name}`
+    + ` ${ctx.session.options.ci_path}`
+    + ` ${ctx.session.options.ci_username}`;
+  exec(runInstall1, (error, stdout) => {
+    if (stdout === '0\n') {
+      exec('bash -x scripts/node/install2.sh 0');
+      ctx.reply('Success!');
+      ctx.session.step = 'idle';
+    } else {
+      ctx.reply('Please, provide environment variables');
+      ctx.session.step = 'deploy_node_step3';
     }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
   });
-  ctx.session.step = 'idle';
+};
+
+const step3 = async (ctx: SessionContext) => {
+  const env = ctx.message.text.split('\n');
+  let runInstall2 = `bash -x scripts/node/install2.sh ${ctx.session.repo_name} ${ctx.session.workdir} ${env.length}`;
+  for (const envvar of env) {
+    runInstall2 += ` ${envvar}`;
+  }
+  exec(runInstall2, () => {
+    ctx.reply('Success!');
+    ctx.session.step = 'idle';
+  });
 };
 
 const deployNode = async (ctx: SessionContext, stepNumber: number) => {
-  const steps = [step1, step2];
+  const steps = [step1, step2, step3];
   await steps[stepNumber - 1](ctx);
 };
 
