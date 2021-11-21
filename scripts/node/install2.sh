@@ -2,11 +2,11 @@
 
 repo_name=$1
 workdir=$2
-vars=$3
+lines=$3
 
-if [ "$vars" != 0 ]; then
+if [ "$lines" != 0 ]; then
   cd "${workdir}" || exit
-  for (( i = 4; i < ("$vars" + 4); i++ )); do
+  for (( i = 4; i < ("$lines" + 4); i++ )); do
     echo "${!i}" >> config.env
   done
 fi

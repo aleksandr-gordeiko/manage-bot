@@ -29,7 +29,7 @@ sudo mv "systemd.service" "/etc/systemd/system/${repo_name}.service"
 
 cd "${workdir}" || exit
 if [ -f "config.env.sample" ]; then
-  echo "ENV"
+  cat "config.env.sample"
 else
   echo "NOENV"
 fi

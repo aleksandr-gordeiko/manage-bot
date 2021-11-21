@@ -21,6 +21,7 @@ interface SessionData {
   options?: Options;
   repo_name?: string;
   workdir?: string;
+  envvars?: object;
 }
 type SessionContext = Context & SessionFlavor<SessionData>;
 
