@@ -8,3 +8,4 @@ git pull
 npm install
 npm run-script build
 systemctl start REPONAME
+curl 'DEPLOY_CURL'

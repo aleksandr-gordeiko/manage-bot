@@ -22,11 +22,16 @@ const step2 = async (ctx: SessionContext) => {
   ctx.session.repo_name = ctx.message.text;
   ctx.session.workdir = `/home/${ctx.session.options.ci_username}/${ctx.session.repo_name}`;
 
+  const deployCurl = `https://api.telegram.org/bot${process.env.BOT_API_TOKEN}`
+    + `/sendMessage?chat_id=${process.env.USER_ID}`
+    + `&text=%E2%9C%85%20${ctx.session.repo_name}%20successfully%20deployed`;
+
   const runInstall1 = 'bash -x scripts/node/install1.sh'
     + ` ${ctx.session.options.github_username}`
     + ` ${ctx.session.repo_name}`
     + ` ${ctx.session.options.ci_path}`
-    + ` ${ctx.session.options.ci_username}`;
+    + ` ${ctx.session.options.ci_username}`
+    + ` ${deployCurl}`;
   exec(runInstall1, (error, stdout) => {
     console.log(error);
     console.log(stdout);

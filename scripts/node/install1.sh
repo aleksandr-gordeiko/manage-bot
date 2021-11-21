@@ -4,6 +4,7 @@ gh_username=$1
 repo_name=$2
 ci_path=$3
 ci_user=$4
+deploy_curl=$5
 workdir_common="/home/${ci_user}"
 
 repo_link="https://github.com/${gh_username}/${repo_name}"
@@ -19,6 +20,7 @@ workdir="${workdir_common}/${repo_name}"
 
 sed -i -- "s:REPONAME:${repo_name}:g" deploy.sh
 sed -i -- "s:WORKDIR:${workdir}:g" deploy.sh
+sed -i -- "s:DEPLOY_CURL:${deploy_curl}:g" deploy.sh
 
 sed -i -- "s:REPONAME:${repo_name}:g" systemd.service
 sed -i -- "s:WORKDIR:${workdir}:g" systemd.service
