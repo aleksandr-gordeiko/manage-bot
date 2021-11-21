@@ -25,6 +25,7 @@ sed -i -- "s:WORKDIR:${workdir}:g" systemd.service
 sed -i -- "s:USER:${ci_user}:g" systemd.service
 
 mv "deploy.sh" "${ci_path}/scripts/${repo_name}-master.sh"
+sudo chmod +x "${ci_path}/scripts/${repo_name}-master.sh"
 sudo mv "systemd.service" "/etc/systemd/system/${repo_name}.service"
 
 cd "${workdir}" || exit
