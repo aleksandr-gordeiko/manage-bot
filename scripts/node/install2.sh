@@ -11,5 +11,8 @@ if [ "$lines" != 0 ]; then
   done
 fi
 
+npm install
+npm run-script build
+
 sudo systemctl enable "${repo_name}"
 sudo systemctl start "${repo_name}"
