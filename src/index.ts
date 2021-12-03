@@ -15,6 +15,8 @@ import cancel from './commands/cancel';
 import setServer from './scenes/setServer';
 import setGithub from './scenes/setGithub';
 import deployNode from './scenes/deployNode';
+import processUpdate from './processUpdate';
+import Server from './server';
 
 const bot = new Bot<SessionContext>(process.env.BOT_API_TOKEN);
 bot.use(session({ initial: (): SessionData => ({ step: 'idle' }) }));
@@ -64,5 +66,13 @@ process.once('SIGTERM', () => {
 });
 
 connectDB()
-  .then(() => bot.start())
+  .then(async () => {
+    bot.start()
+      .then((r) => console.log(r));
+    const server = new Server();
+    server.runServer(61440);
+    while (true) {
+      await processUpdate(await server.getUpdate(), bot);
+    }
+  })
   .catch((err) => console.log(err));

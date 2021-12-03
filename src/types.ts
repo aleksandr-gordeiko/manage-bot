@@ -25,4 +25,14 @@ interface SessionData {
 }
 type SessionContext = Context & SessionFlavor<SessionData>;
 
-export { Options, SessionData, SessionContext };
+interface Update {
+  repository: string
+  status: string
+}
+
+export {
+  Options,
+  SessionData,
+  SessionContext,
+  Update,
+};
