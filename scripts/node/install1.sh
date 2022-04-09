@@ -4,9 +4,10 @@ gh_username=$1
 repo_name=$2
 ci_path=$3
 ci_user=$4
+github_pat=$5
 workdir_common="/home/${ci_user}"
 
-repo_link="https://github.com/${gh_username}/${repo_name}"
+repo_link="https://${gh_username}:${github_pat}@github.com/${gh_username}/${repo_name}.git"
 
 cd "scripts/node" || exit
 cp "deploy.sh" "${workdir_common}/"

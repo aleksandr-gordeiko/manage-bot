@@ -26,13 +26,17 @@ const step2 = async (ctx: SessionContext) => {
     + ` ${ctx.session.options.github_username}`
     + ` ${ctx.session.repo_name}`
     + ` ${ctx.session.options.ci_path}`
-    + ` ${ctx.session.options.ci_username}`;
+    + ` ${ctx.session.options.ci_username}`
+    + ` ${process.env.GITHUB_PAT}`;
   exec(runInstall1, (error, stdout) => {
     console.log(error);
     console.log(stdout);
     const out = stdout.slice(0, -1);
 
-    if (out === 'NOENV') {
+    if (error) {
+      ctx.reply('Could not download repository');
+      ctx.session.step = 'idle';
+    } else if (out === 'NOENV') {
       exec(`bash -x scripts/node/install2.sh ${ctx.session.repo_name} ${ctx.session.workdir} 0`);
       ctx.reply('Success!');
       ctx.session.step = 'idle';
