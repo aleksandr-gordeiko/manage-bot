@@ -11,7 +11,7 @@ if [ "$lines" != 0 ]; then
   done
 fi
 
-npm install
+npm install --production
 npm run-script build
 
 sudo systemctl enable "${repo_name}"
