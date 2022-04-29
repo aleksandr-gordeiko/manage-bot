@@ -34,12 +34,17 @@ const step2 = async (ctx: SessionContext) => {
     const out = stdout.slice(0, -1);
 
     if (error) {
-      ctx.reply('Could not download repository');
+      ctx.reply('❌ Could not download repository');
       ctx.session.step = 'idle';
     } else if (out === 'NOENV') {
-      exec(`bash -x scripts/node/install2.sh ${ctx.session.repo_name} ${ctx.session.workdir} 0`);
-      ctx.reply('Success!');
-      ctx.session.step = 'idle';
+      exec(`bash -x scripts/node/install2.sh ${ctx.session.repo_name} ${ctx.session.workdir} 0`,
+        (error_, stdout_) => {
+          console.log(error_);
+          console.log(stdout_);
+          if (error_) ctx.reply(`❌ Error: ${error_}`);
+          else ctx.reply('✅ Deployment succeeded');
+          ctx.session.step = 'idle';
+        });
     } else {
       ctx.session.envvars = {};
       for (const envvar of out.split('\n')) {
@@ -86,7 +91,8 @@ const step3 = async (ctx: SessionContext) => {
   exec(runInstall2, (error, stdout) => {
     console.log(error);
     console.log(stdout);
-    ctx.reply('Success!');
+    if (error) ctx.reply(`❌ Error: ${error}`);
+    else ctx.reply('✅ Deployment succeeded');
     ctx.session.step = 'idle';
   });
 };
