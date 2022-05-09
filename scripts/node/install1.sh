@@ -15,6 +15,7 @@ cp "systemd.service" "${workdir_common}/"
 
 cd "${workdir_common}" || exit
 
+systemctl stop "${repo_name}"
 rm -rf "${repo_name}"
 rm "${ci_path}/scripts/${repo_name}-master.sh"
 rm "/etc/systemd/system/${repo_name}.service"

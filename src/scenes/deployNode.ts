@@ -48,13 +48,15 @@ const step2 = async (ctx: SessionContext) => {
     } else {
       ctx.session.envvars = {};
       for (const envvar of out.split('\n')) {
-        if (envvar.slice(-1) === '=') {
-          ctx.session.envvars[envvar.slice(0, -1)] = null;
-        } else {
-          const split = envvar.split('=');
-          ctx.session.envvars[split[0]] = split
-            .slice(1)
-            .join('=');
+        if (envvar.slice(0, 1) !== '#') {
+          if (envvar.slice(-1) === '=') {
+            ctx.session.envvars[envvar.slice(0, -1)] = null;
+          } else {
+            const split = envvar.split('=');
+            ctx.session.envvars[split[0]] = split
+              .slice(1)
+              .join('=');
+          }
         }
       }
 
